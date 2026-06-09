@@ -256,16 +256,16 @@ export default function Hero({ setCurrentPage }) {
             {/* Partner Logos 2x2 Grid */}
             <div className="grid grid-cols-2 gap-y-5 gap-x-8 border-t border-slate-100 pt-6">
               <div className="flex items-center justify-center">
-                <img src="/assets/Invisalign-logo.webp" alt="Invisalign" className="h-[28px] w-auto object-contain opacity-80" />
+                <img src="/assets/Invisalign-logo.webp" alt="Invisalign" className="h-[36px] w-auto object-contain opacity-80" />
               </div>
               <div className="flex items-center justify-center">
-                <img src="/assets/ivoclar-vivadent-logo.webp" alt="Ivoclar Vivadent" className="h-[26px] w-auto object-contain opacity-80" />
+                <img src="/assets/ivoclar-vivadent-logo.webp" alt="Ivoclar Vivadent" className="h-[34px] w-auto object-contain opacity-80" />
               </div>
               <div className="flex items-center justify-center">
-                <img src="/assets/osstem-logo.webp" alt="OSSTEM Implant" className="h-[18px] w-auto object-contain opacity-80" />
+                <img src="/assets/osstem-logo.webp" alt="OSSTEM Implant" className="h-[24px] w-auto object-contain opacity-80" />
               </div>
               <div className="flex items-center justify-center">
-                <img src="/assets/3shape-logo.webp" alt="3shape" className="h-[14px] w-auto object-contain opacity-80" />
+                <img src="/assets/3shape-logo.webp" alt="3shape" className="h-[20px] w-auto object-contain opacity-80" />
               </div>
             </div>
 
