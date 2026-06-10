@@ -8,6 +8,7 @@ import {
   User, 
   Phone, 
   ChevronDown, 
+  ChevronLeft,
   Check,
   CalendarCheck,
   ClipboardList,
@@ -142,6 +143,12 @@ export default function AppointmentPage({ setCurrentPage, initialService }) {
   const [currentStep, setCurrentStep] = useState(1);
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [openFaqIndex, setOpenFaqIndex] = useState(null);
+  const [toastMessage, setToastMessage] = useState('');
+
+  const showToast = (msg) => {
+    setToastMessage(msg);
+    setTimeout(() => setToastMessage(''), 3500);
+  };
 
   // Form State
   const [selectedService, setSelectedService] = useState(null);
@@ -173,15 +180,15 @@ export default function AppointmentPage({ setCurrentPage, initialService }) {
 
   const handleNextStep = () => {
     if (currentStep === 1 && !selectedService) {
-      alert("Please select a service.");
+      showToast("Please select a service before continuing.");
       return;
     }
     if (currentStep === 2 && (!selectedDate || !selectedTime)) {
-      alert("Please select both a date and time.");
+      showToast("Please select both your preferred date and time.");
       return;
     }
     if (currentStep === 3 && (!userDetails.name || !userDetails.phone)) {
-      alert("Please fill in your Name and Phone Number.");
+      showToast("Please provide your Name and Phone Number.");
       return;
     }
     
@@ -215,8 +222,23 @@ export default function AppointmentPage({ setCurrentPage, initialService }) {
   };
 
   return (
-    <div className="bg-white min-h-screen pt-[72px] lg:pt-[88px] flex flex-col">
-      
+    <div className="bg-white min-h-screen pt-[72px] lg:pt-[88px] flex flex-col relative overflow-hidden">
+      <AnimatePresence>
+        {toastMessage && (
+          <motion.div 
+            initial={{ opacity: 0, y: -50, x: '-50%' }}
+            animate={{ opacity: 1, y: 0, x: '-50%' }}
+            exit={{ opacity: 0, y: -50, x: '-50%' }}
+            className="fixed top-[100px] left-1/2 z-[100] bg-slate-900 text-white px-6 py-4 rounded-2xl shadow-2xl flex items-center gap-3 w-[90%] max-w-sm"
+          >
+            <div className="w-8 h-8 rounded-full bg-brand-blue/20 flex items-center justify-center flex-shrink-0">
+              <Info className="w-4 h-4 text-brand-blue" />
+            </div>
+            <span className="text-[13px] font-bold leading-tight">{toastMessage}</span>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
       {/* Hero Header */}
       <section className="relative w-full h-[280px] lg:h-[320px] bg-gradient-to-r from-[#f4f7fa] to-[#e6eef5] overflow-hidden flex items-center">
         <div className="absolute top-0 right-0 h-full w-full lg:w-1/2 z-0">
@@ -327,14 +349,13 @@ export default function AppointmentPage({ setCurrentPage, initialService }) {
                   })}
                 </div>
 
-                <div className="mt-12 flex justify-center">
+                <div className="mt-12 flex justify-center w-full">
                   <button 
                     onClick={handleNextStep}
-                    disabled={!selectedService}
-                    className={`px-10 py-4 font-black text-[14px] rounded-[14px] flex items-center justify-center gap-2 transition-all cursor-pointer ${
+                    className={`w-full sm:w-auto px-10 py-4 font-black text-[14px] rounded-[14px] flex items-center justify-center gap-2 transition-all cursor-pointer ${
                       selectedService 
                         ? 'bg-brand-blue hover:bg-brand-hover text-white shadow-[0_6px_20px_rgba(29,78,216,0.25)] hover:-translate-y-0.5' 
-                        : 'bg-slate-200 text-slate-400 cursor-not-allowed'
+                        : 'bg-slate-100 text-slate-500 hover:bg-slate-200'
                     }`}
                   >
                     Continue to Date & Time <ArrowRight className="w-5 h-5" />
@@ -393,17 +414,16 @@ export default function AppointmentPage({ setCurrentPage, initialService }) {
 
                 </div>
 
-                <div className="mt-12 flex items-center justify-between border-t border-slate-100 pt-8">
-                  <button onClick={handlePrevStep} className="px-6 py-3.5 bg-slate-50 border-2 border-slate-100 text-slate-600 font-bold text-[13px] rounded-[12px] hover:bg-slate-100 transition-colors cursor-pointer flex items-center">
+                <div className="mt-12 flex flex-col-reverse sm:flex-row items-center justify-between border-t border-slate-100 pt-8 gap-4">
+                  <button onClick={handlePrevStep} className="w-full sm:w-auto px-6 py-3.5 bg-slate-50 border-2 border-slate-100 text-slate-600 font-bold text-[13px] rounded-[12px] hover:bg-slate-100 transition-colors cursor-pointer flex items-center justify-center">
                     <ChevronLeft className="w-4 h-4 mr-1" /> Back
                   </button>
                   <button 
                     onClick={handleNextStep} 
-                    disabled={!selectedDate || !selectedTime}
-                    className={`px-8 py-3.5 font-black text-[13px] rounded-[12px] transition-all flex items-center gap-2 cursor-pointer ${
+                    className={`w-full sm:w-auto px-8 py-3.5 font-black text-[13px] rounded-[12px] transition-all flex items-center justify-center gap-2 cursor-pointer ${
                       selectedDate && selectedTime
                         ? 'bg-brand-blue text-white hover:bg-brand-hover shadow-[0_6px_20px_rgba(29,78,216,0.25)] hover:-translate-y-0.5'
-                        : 'bg-slate-200 text-slate-400 cursor-not-allowed'
+                        : 'bg-slate-100 text-slate-500 hover:bg-slate-200'
                     }`}
                   >
                     Continue <ArrowRight className="w-4 h-4" />
@@ -496,17 +516,16 @@ export default function AppointmentPage({ setCurrentPage, initialService }) {
                   </div>
                 </div>
 
-                <div className="mt-12 pt-8 border-t border-slate-100 flex flex-col sm:flex-row items-center justify-between gap-6">
+                <div className="mt-12 pt-8 border-t border-slate-100 flex flex-col-reverse sm:flex-row items-center justify-between gap-4">
                   <button onClick={handlePrevStep} className="w-full sm:w-auto px-6 py-3.5 bg-slate-50 border-2 border-slate-100 text-slate-600 font-bold text-[13px] rounded-[12px] hover:bg-slate-100 transition-colors cursor-pointer flex items-center justify-center">
                     <ChevronLeft className="w-4 h-4 mr-1" /> Back
                   </button>
                   <button 
                     onClick={handleNextStep} 
-                    disabled={!userDetails.name || !userDetails.phone}
                     className={`w-full sm:w-auto px-10 py-4 font-black text-[14px] rounded-[12px] flex items-center justify-center gap-2 cursor-pointer transition-all ${
                       userDetails.name && userDetails.phone
                         ? 'bg-slate-900 text-white hover:bg-brand-blue shadow-[0_6px_20px_rgba(15,23,42,0.2)] hover:-translate-y-0.5'
-                        : 'bg-slate-200 text-slate-400 cursor-not-allowed'
+                        : 'bg-slate-100 text-slate-500 hover:bg-slate-200'
                     }`}
                   >
                     <Lock className="w-4 h-4" /> Confirm Booking
